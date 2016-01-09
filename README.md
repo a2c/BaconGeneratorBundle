@@ -1,0 +1,2 @@
+# BaconGeneratorBundle
+Custom SensioGeneratorBundle

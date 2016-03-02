@@ -9,9 +9,16 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 class DoctrineCrudGenerator extends BaseGenerator
 {
-    public function __construct(Filesystem $filesystem)
+    /**
+     * Constructor.
+     *
+     * @param Filesystem $filesystem A Filesystem instance
+     * @param string     $rootDir    The root dir
+     */
+    public function __construct(Filesystem $filesystem, $rootDir)
     {
-        parent::__construct($filesystem);
+        $this->filesystem = $filesystem;
+        $this->rootDir = $rootDir;
     }
 
     /**
@@ -89,26 +96,6 @@ class DoctrineCrudGenerator extends BaseGenerator
         return array_filter($this->actions, function ($item) {
             return in_array($item, array('show', 'edit','delete'));
         });
-    }
-
-    /**
-     * Sets the configuration format.
-     *
-     * @param string $format The configuration format
-     */
-    private function setFormat($format)
-    {
-        switch ($format) {
-            case 'yml':
-            case 'xml':
-            case 'php':
-            case 'annotation':
-                $this->format = $format;
-                break;
-            default:
-                $this->format = 'yml';
-                break;
-        }
     }
 
     protected function generateEntityRepository($metadata)

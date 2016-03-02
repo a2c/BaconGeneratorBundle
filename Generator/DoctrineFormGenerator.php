@@ -56,7 +56,7 @@ class DoctrineFormGenerator extends BaseGenerator
      * @param string            $entity   The entity relative class name
      * @param ClassMetadataInfo $metadata The entity metadata class
      */
-    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata)
+    public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata,$forceOverwrite = false)
     {
         $parts       = explode('\\', $entity);
         $entityClass = array_pop($parts);
@@ -67,7 +67,7 @@ class DoctrineFormGenerator extends BaseGenerator
         $handlerClassName     = $entityClass.'FormHandler';
         $classFormHandlerPath = $dirPath.'/Handler/'.str_replace('\\', '/', $entity).'FormHandler.php';
 
-        if (file_exists($this->classPath)) {
+        if (!$forceOverwrite && file_exists($this->classPath)) {
             throw new \RuntimeException(sprintf('Unable to generate the %s form class as it already exists under the %s file', $this->className, $this->classPath));
         }
 

@@ -45,7 +45,10 @@ class CrudDoctrineCommand extends GenerateDoctrineCrudCommand
 
     protected function createGenerator(BundleInterface $bundle = null)
     {
-        return new BaconDoctrineCrudGenerator($this->getContainer()->get('filesystem'));
+        return new BaconDoctrineCrudGenerator(
+            $this->getContainer()->get('filesystem'),
+            $this->getContainer()->getParameter('kernel.root_dir')
+        );
     }
 
     protected function getFormGenerator($bundle = null)

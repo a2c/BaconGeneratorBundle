@@ -1,32 +1,32 @@
-                {%- for action in record_actions %}
+                    {%- for action in record_actions %}
 
-                        {%- if action == 'show'  %}
+                            {%- if action == 'show'  %}
 
-                                        <a href="{{ "{{ path('" ~ route_name_prefix ~ "_" ~ action ~ "', { 'id': entity."~ identifier ~" }) }}" }}" class="btn btn-sm btn-default" data-original-title="{{ "{{ 'Show'|trans }}" }}">
-                                            <span class="glyphicon glyphicon-eye-open"></span>
-                                        </a>
+                                            <a href="{{ "{{ path('" ~ route_name_prefix ~ "_" ~ action ~ "', { 'id': entity."~ identifier ~" }) }}" }}" class="btn btn-sm btn-default" data-original-title="{{ "{{ 'Show'|trans }}" }}">
+                                                <span class="glyphicon glyphicon-eye-open"></span>
+                                            </a>
 
-                        {%- endif  %}
+                            {%- endif  %}
 
-                        {%- if action == 'edit' %}
+                            {%- if action == 'edit' %}
 
-                                        <a href="{{ "{{ path('" ~ route_name_prefix ~ "_" ~ action ~ "', { 'id': entity."~ identifier ~" }) }}" }}" class="btn btn-sm btn-default" data-original-title="{{ "{{ 'Edit'|trans }}" }}">
-                                            <span class="glyphicon glyphicon-pencil"></span>
-                                        </a>
+                                            <a href="{{ "{{ path('" ~ route_name_prefix ~ "_" ~ action ~ "', { 'id': entity."~ identifier ~" }) }}" }}" class="btn btn-sm btn-default" data-original-title="{{ "{{ 'Edit'|trans }}" }}">
+                                                <span class="glyphicon glyphicon-pencil"></span>
+                                            </a>
 
-                        {%- endif  %}
+                            {%- endif  %}
 
-                        {%- if action == 'delete' %}
+                            {%- if action == 'delete' %}
 
-                                         <button type="button" class="btn btn-sm btn-danger" title="" data-target="#modalDelete{{ "{{ entity.id }}" }}" data-toggle="modal" data-original-title="{{ "{{ 'Remove'|trans }}" }}">
-                                            <span class="glyphicon glyphicon-remove"></span>
-                                        </button>
-                                        {{  "{% embed 'BaconCoreBundle:partial:modalDelete.html.twig' with {
-                                            form: form_delete,
-                                            route: '" ~ route_name_prefix ~ "_" ~ action ~ "',
-                                            id: entity."~ identifier ~"
-                                        } %} " }}
-                                        {{  "{% endembed %}" }}
-                        {%- endif  %}
+                                             <button type="button" class="btn btn-sm btn-danger" title="" data-target="#modalDelete{{ "{{ entity.id }}" }}" data-toggle="modal" data-original-title="{{ "{{ 'Remove'|trans }}" }}">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                            {{  "{% embed 'BaconCoreBundle:partial:modalDelete.html.twig' with {
+                                                form: form_delete,
+                                                route: '" ~ route_name_prefix ~ "_" ~ action ~ "',
+                                                id: entity."~ identifier ~"
+                                            } %} " }}
+                                            {{  "{% endembed %}" }}
+                            {%- endif  %}
 
-                {%- endfor %}
+                    {%- endfor %}

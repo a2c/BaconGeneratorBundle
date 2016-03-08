@@ -7,41 +7,55 @@
 {% block phpdoc_method_annotations %}
 {% if 'annotation' == format %}
      * @Route("/new", name="{{ route_name_prefix }}_new")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      * @Template()
 {% endif %}
 {% endblock phpdoc_method_annotations %}
      */
 {% block method_definition %}
-    public function newAction()
+    public function newAction(Request $request)
 {% endblock method_definition %}
     {
 {% block method_body %}
         $breadcumbs = $this->container->get('bacon_breadcrumbs');
 
-        $breadcumbs->addItem(array(
+        $breadcumbs->addItem([
             'title' => '{{ entity }}',
             'route' => '{{ route_name_prefix }}',
-        ));
+        ]);
 
-        $breadcumbs->addItem(array(
+        $breadcumbs->addItem([
             'title' => 'New',
             'route' => '',
-        ));
+        ]);
 
         $form = $this->createForm({{ entity }}FormType::class, new {{ entity }}());
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $handler = new {{ entity }}FormHandler(
+                $form,
+                $this->getDoctrine()->getManager(),
+                $this->get('session')->getFlashBag()
+            );
+
+            if ($entity = $handler->save()) {
+                return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));
+            }
+        }
 {% endblock method_body %}
 
 {% block method_return %}
 {% if 'annotation' == format %}
-        return array(
+        return [
             'form'   => $form->createView(),
-        );
+        ];
 {% else %}
-        return $this->render('{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:new.html.twig', array(
+        return $this->render('{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:new.html.twig', [
             'form'   => $form->createView(),
-        ));
+        ]);
 {% endif %}
 {% endblock method_return %}
     }

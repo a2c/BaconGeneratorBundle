@@ -18,28 +18,21 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-{% endblock method_body %}
+        $this->get('session')->remove('{{ entity|lower }}_search_session');
 
         if ($request->getMethod() === Request::METHOD_POST) {
 
-            $form = $this->createForm({{ entity }}FormType::class,new {{ entity }}(),array(
-                'search' => true,
-            ));
+            $form = $this->createForm({{ entity }}FormType::class, new {{ entity }}(), [
+            'search' => true,
+            ]);
 
             $form->handleRequest($request);
 
-            $this->get('session')->set('{{ entity|lower }}_search_session',serialize($form->getData()));
-        } else {
-            $this->get('session')->remove('{{ entity|lower }}_search_session');
+            $this->get('session')->set('{{ entity|lower }}_search_session', serialize($form->getData()));
         }
-
+{% endblock method_body %}
 {% block method_return %}
-    {% if 'annotation' == format %}
+
         return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));
-    {% else %}
-        return $this->render('{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:index.html.twig', array(
-        'entities' => $entities,
-        ));
-    {% endif %}
 {% endblock method_return %}
-}
+    }

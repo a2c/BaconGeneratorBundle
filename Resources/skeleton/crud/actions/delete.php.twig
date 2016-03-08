@@ -12,28 +12,21 @@
 {% endblock phpdoc_method_annotations %}
      */
 {% block method_definition %}
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, {{ entity_class }} $entity)
 {% endblock method_definition %}
     {
 {% block method_body %}
-
         $handler = new {{ entity }}FormHandler(
-            $this->createDeleteForm(),
-            $request,
+            $this->createDeleteForm('{{ route_name_prefix }}_delete', $entity),
             $this->get('doctrine')->getManager(),
             $this->get('session')->getFlashBag()
         );
 
+        $handler->delete($entity);
 {% endblock method_body %}
 
 {% block method_return %}
-        $entity = $this->getDoctrine()->getRepository('{{ bundle }}:{{ entity }}')->find($id);
-
-        if ($handler->delete($entity)) {
-            return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));
-        } else {
-            return $this->redirect($this->generateUrl('{{ route_name_prefix }}_show', array('id' => $id)));
-        }
+        return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));
 {% endblock method_return %}
     }
 

@@ -7,58 +7,59 @@
 {% block phpdoc_method_annotations %}
 {% if 'annotation' == format %}
      * @Route("/{id}/edit", name="{{ route_name_prefix }}_edit")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      * @Template()
 {% endif %}
 {% endblock phpdoc_method_annotations %}
      */
 {% block method_definition %}
-    public function editAction($id)
+    public function editAction(Request $request, {{ entity }} $entity)
 {% endblock method_definition %}
     {
 {% block method_body %}
         $breadcumbs = $this->container->get('bacon_breadcrumbs');
 
-        $breadcumbs->addItem(array(
+        $breadcumbs->addItem([
             'title' => '{{ entity }}',
             'route' => '{{ route_name_prefix }}',
-        ));
+        ]);
 
-        $breadcumbs->addItem(array(
+        $breadcumbs->addItem([
             'title' => 'Edit',
             'route' => '',
-        ));
-
-        $entity = $this->getDoctrine()->getRepository('{{ bundle }}:{{ entity }}')->find($id);
-
-        if (!$entity) {
-
-            $this->get('session')->getFlashBag()->add('message', array(
-                'type' => 'error',
-                'message' => 'The registry not Found',
-            ));
-
-            return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));
-        }
+        ]);
 
         $form = $this->createForm({{ entity_class }}FormType::class, $entity);
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm('{{ route_name_prefix }}_delete', $entity);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $handler = new {{ entity }}FormHandler(
+                $form,
+                $this->getDoctrine()->getManager(),
+                $this->get('session')->getFlashBag()
+            );
+
+            if ($entity = $handler->save()) {
+                return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));
+            }
+        }
 {% endblock method_body %}
 
 {% block method_return %}
 {% if 'annotation' == format %}
-        return array(
+        return [
             'entity'      => $entity,
             'form'        => $form->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ];
 {% else %}
-        return $this->render('{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:edit.html.twig', array(
+        return $this->render('{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:edit.html.twig', [
             'entity'      => $entity,
             'form'        => $form->createView(),
             'delete_form' => $deleteForm->createView(),
-        ));
+        ]);
 {% endif %}
 {% endblock method_return %}
     }

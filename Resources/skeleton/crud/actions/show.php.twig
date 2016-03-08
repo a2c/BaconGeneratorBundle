@@ -14,54 +14,42 @@
 {% endblock phpdoc_method_annotations %}
      */
 {% block method_definition %}
-    public function showAction($id)
+    public function showAction(Request $request, {{ entity }} $entity)
 {% endblock method_definition %}
     {
 {% block method_body %}
         $breadcumbs = $this->container->get('bacon_breadcrumbs');
 
-        $breadcumbs->addItem(array(
+        $breadcumbs->addItem([
             'title' => '{{ entity }}',
             'route' => '{{ route_name_prefix }}',
-        ));
+        ]);
 
-        $breadcumbs->addItem(array(
+        $breadcumbs->addItem([
             'title' => 'Details',
             'route' => '',
-        ));
+        ]);
 
-        $entity = $this->getDoctrine()->getRepository('{{ bundle }}:{{ entity }}')->find($id);
-
-        if (!$entity) {
-
-            $this->get('session')->getFlashBag()->add('message', array(
-                'type' => 'error',
-                'message' => 'The registry not Found',
-            ));
-
-            return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));
-        }
 {% if 'delete' in actions %}
-
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm('{{ route_name_prefix }}_delete', $entity);
 {% endif %}
 {% endblock method_body %}
 
 {% block method_return %}
 {% if 'annotation' == format %}
-        return array(
+        return [
             'entity'      => $entity,
 {% if 'delete' in actions %}
             'delete_form' => $deleteForm->createView(),
 {% endif %}
-        );
+        ];
 {% else %}
-        return $this->render('{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:show.html.twig', array(
+        return $this->render('{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:show.html.twig', [
             'entity'      => $entity,
 {% if 'delete' in actions %}
             'delete_form' => $deleteForm->createView(),
 {% endif %}
-        ));
+        ]);
 {% endif %}
 {% endblock method_return %}
     }

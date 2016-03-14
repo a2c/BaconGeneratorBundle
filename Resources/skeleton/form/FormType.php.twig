@@ -24,7 +24,7 @@ class {{ form_class }} extends AbstractType
             $builder
             {%- for field in fields %}
 
-                ->add('{{ field }}')->setRequired(false)
+                ->add('{{ field }}')->setRequired({{ fields_mapping[field]["nullable"] != true ? 'true' : 'false' }})
             {%- endfor %}
 
             ;

@@ -49,14 +49,36 @@ Class {{ entity_class }}Controller extends BaseController
         {%- include 'crud/actions/rest/get.php.twig' %}
         {%- include 'crud/actions/rest/get_one.php.twig' %}
     {%- endif %}
+
     {%- if 'put' in actions %}
         {%- include 'crud/actions/rest/put.php.twig' %}
     {%- endif %}
+
     {%- if 'post' in actions %}
         {%- include 'crud/actions/rest/post.php.twig' %}
     {%- endif %}
+    
     {%- if 'delete' in actions %}
         {%- include 'crud/actions/rest/delete.php.twig' %}
     {%- endif %}
+    {# private function process($request, $entity) 
+       # $data = json_decode($request->getContent(), true);
+       # $form = $this->createForm({{ entity_class}}FormType::class, $entity);
+       #$form->submit($data);
+
+        #if ($form->isSubmitted()) {
+
+        #   $handler = new {{ entity_class}}FormHandler(
+        #       $form,
+        #        $this->getDoctrine()->getManager(),
+        #        $this->get('session')->getFlashBag()
+        #    );
+        #
+        #    $entity = $handler->save();
+        # }
+
+        # return $entity;
+#}
 {% endblock class_body %}
+
 }

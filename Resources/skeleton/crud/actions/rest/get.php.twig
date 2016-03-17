@@ -17,7 +17,6 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-
         $entity = new {{ entity }}();
         $query = $this->getDoctrine()->getRepository('{{ bundle }}:{{ entity }}')->getQueryPagination($entity,$sort,$direction);
 

@@ -66,4 +66,14 @@ class RestDoctrineCommand extends GenerateDoctrineCrudCommand
             $this->getContainer()->getParameter('kernel.root_dir')
         );
     }
+
+    protected function getFormGenerator($bundle = null)
+    {
+        if (null === $this->formGenerator) {
+            $this->formGenerator = new BaconDoctrineFormGenerator($this->getContainer()->get('filesystem'));
+            $this->formGenerator->setSkeletonDirs($this->getSkeletonDirs($bundle));
+        }
+
+        return $this->formGenerator;
+    }
 }

@@ -64,6 +64,7 @@ class DoctrineRestGenerator extends BaseGenerator
         $this->setFormat($format);
         
         $this->generateRestControllerClass($forceOverwrite);
+        $this->generateEntityRepository($metadata);
     }
 
     /**
@@ -155,5 +156,23 @@ class DoctrineRestGenerator extends BaseGenerator
         $prefix = trim($prefix, '_');
 
         return $prefix;
+    }
+    
+    /**
+     * @param $metadata
+     */
+    protected function generateEntityRepository(ClassMetadataInfo $metadata)
+    {
+        $parts = explode('\\', $this->entity);
+        $entityClass = array_pop($parts);
+        $entityNamespace = implode('\\', $parts);
+        $target = $this->bundle->getPath() . '/Repository/' . $entityClass . 'Repository.php';
+        $this->renderFile('crud/repository/repository.php.twig', $target, array(
+            'fields'            => $this->metadata->fieldMappings,
+            'bundle'            => $this->bundle->getName(),
+            'entity'            => $this->entity,
+            'entity_class'      => $entityClass,
+            'namespace'         => $this->bundle->getNamespace(),
+        ));
     }
 }

@@ -65,7 +65,7 @@ class DoctrineCrudGenerator extends BaseGenerator
 
         $this->generateControllerClass($forceOverwrite);
         $this->generateEntityRepository($metadata);
-        $dir = sprintf('%s/Resources/views/%s', $this->bundle->getPath(), str_replace('\\', '/', 'Backend/' . strtolower($this->entity)));
+        $dir = sprintf('%s/Resources/views/%s', $this->bundle->getPath(), str_replace('\\', '/', 'Backend/' . $this->entity));
 
         if (!file_exists($dir)) {
             $this->filesystem->mkdir($dir, 0777);

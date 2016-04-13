@@ -1,6 +1,6 @@
 <?php
 
-namespace Bacon\Bundle\GeneratorBundle\Command;
+namespace Bacon\Bundle\GeneratorBundle\Rest;
 
 use Sensio\Bundle\GeneratorBundle\Command\GenerateDoctrineCrudCommand;
 use Sensio\Bundle\GeneratorBundle\Generator\DoctrineCrudGenerator;

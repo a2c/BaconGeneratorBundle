@@ -40,6 +40,16 @@
         ));
 
         $data = $query->getArrayResult();
+
+        if( $data == null ) {
+
+            $this->get('session')->getFlashBag()->add('message', [
+                'type' => 'error'
+            ]);
+
+            return $this->redirect($this->generateUrl('{{ entity|lower }}'));
+        }
+
         $header = array();
         
         foreach($data[0] as $k => $v)  {

@@ -42,9 +42,19 @@
             );
 
             if ($entity = $handler->save()) {
-                return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));
+                $route = $this->get('session')->get('last-route');
+
+                if(!$route) {
+                    $route = $this->generateUrl('{{ route_name_prefix }}');
+                }
+
+                return $this->redirect($route);
             }
         }
+        
+        $referer = $request->headers->get('referer');
+        $this->get('session')->set('last-route', $referer);
+
 {% endblock method_body %}
 
 {% block method_return %}

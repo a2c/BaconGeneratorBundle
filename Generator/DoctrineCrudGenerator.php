@@ -21,6 +21,7 @@ class DoctrineCrudGenerator extends BaseGenerator
     protected $metadata;
     protected $format;
     protected $actions;
+    protected $controllerFolder;
 
     /**
      * Constructor.
@@ -65,7 +66,7 @@ class DoctrineCrudGenerator extends BaseGenerator
 
         $this->generateControllerClass($forceOverwrite);
         $this->generateEntityRepository($metadata);
-        $dir = sprintf('%s/Resources/views/%s', $this->bundle->getPath(), str_replace('\\', '/', 'Backend/' . $this->entity));
+        $dir = sprintf('%s/Resources/views/%s', $this->bundle->getPath(), str_replace('\\', '/', $this->controllerFolder . '/' . $this->entity));
 
         if (!file_exists($dir)) {
             $this->filesystem->mkdir($dir, 0777);
@@ -110,6 +111,16 @@ class DoctrineCrudGenerator extends BaseGenerator
     }
 
     /**
+     * Sets the controller folder.
+     *
+     * @param string $controllerFolder The configuration controllerFolder
+     */
+    public function setControllerFolder($controllerFolder)
+    {
+        $this->controllerFolder = $controllerFolder;
+    }
+
+    /**
      * Generates the routing configuration.
      */
     protected function generateConfiguration()
@@ -145,8 +156,13 @@ class DoctrineCrudGenerator extends BaseGenerator
         $entityClass = array_pop($parts);
         $entityNamespace = implode('\\', $parts);
 
+        $folder = '';
+        if($this->controllerFolder) {
+            $folder = '/' . $this->controllerFolder;
+        }
+
         $target = sprintf(
-            '%s/Controller/%s/Backend/%sController.php',
+            '%s/Controller/%s' . $folder . '/%sController.php',
             $dir,
             str_replace('\\', '/', $entityNamespace),
             $entityClass

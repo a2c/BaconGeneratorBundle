@@ -41,6 +41,19 @@
         $query = $this->getDoctrine()->getRepository('{{ bundle }}:{{ entity }}')->getQueryPagination($entity, $sort, $direction);
 
         $paginator = $this->getPagination($query, $page, {{ entity }}::PER_PAGE);
+
+        if($page > 1 && $paginator->count() == 0) {
+            return $this->redirect(
+                $this->generateUrl('{{ route_name_prefix }}_pagination', 
+                    array(
+                        'page'=> $page - 1, 
+                        'sort' => $sort, 
+                        'direction' => $direction
+                    )
+                )
+            );
+        }
+
         $paginator->setUsedRoute('{{ route_name_prefix }}_pagination');
 
         $form = $this->createForm({{ entity }}FormType::class, $entity, [

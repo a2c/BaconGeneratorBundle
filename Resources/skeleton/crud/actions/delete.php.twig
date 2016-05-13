@@ -26,7 +26,7 @@
 {% endblock method_body %}
 
 {% block method_return %}
-        return $this->redirect($this->generateUrl($request->headers->get('referer')));
+        return $this->redirect($request->headers->get('referer'));
 {% endblock method_return %}
     }
 

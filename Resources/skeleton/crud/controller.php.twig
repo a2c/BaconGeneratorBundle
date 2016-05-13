@@ -67,5 +67,10 @@ class {{ entity_class }}Controller extends AdminController
     {%- if 'delete' in actions %}
         {%- include 'crud/actions/delete.php.twig' %}
     {%- endif %}
+
+    {%- if 'batch' in actions %}
+        {%- include 'crud/actions/batch.php.twig' %}
+        {%- include 'crud/actions/deletebatch.php.twig' %}
+    {%- endif %}
 {% endblock class_body %}
 }

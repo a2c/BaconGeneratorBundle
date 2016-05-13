@@ -1,0 +1,42 @@
+	/**
+{% block phpdoc_method_header %}
+     * Deletes a few {{ entity }} entity.
+{% endblock phpdoc_method_header %}
+     *
+{% block phpdoc_method_annotations %}
+{% if 'annotation' == format %}
+     * @Route("/batch", name="{{ route_name_prefix }}_batch")
+     * @Security("has_role('ROLE_ADMIN')")
+     * @Method("POST")
+{% endif %}
+{% endblock phpdoc_method_annotations %}
+     */
+{% block method_definition %}
+    public function batchAction(Request $request)
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        $data = $request->request->all();
+
+        if(!array_key_exists('ids', $data) || count($data['ids']) == 0) {
+
+            return $this->redirect($request->headers->get('referer'));
+        }
+        
+        $action = '';
+        
+        if(array_key_exists('batch-action', $data)) {
+            $action = $data['batch-action'];
+        }
+        
+        if($action == 'deleteBatch') {
+            $this->deleteBatch($data['ids']);
+        }
+{% endblock method_body %}
+{% block method_return %}
+        return $this->redirect($request->headers->get('referer'));
+{% endblock method_return %}
+    }
+    
+{% block form %}
+{% endblock form %}

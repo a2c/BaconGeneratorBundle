@@ -51,7 +51,7 @@ class DoctrineCrudGenerator extends BaseGenerator
     {
         $this->routePrefix = $routePrefix;
         $this->routeNamePrefix = self::getRouteNamePrefix($routePrefix);
-        $this->actions = $needWriteActions ? array('index', 'search', 'show', 'new', 'edit', 'export', 'delete') : array('index', 'show');
+        $this->actions = $needWriteActions ? array('index', 'search', 'show', 'new', 'edit', 'export', 'delete', 'batch') : array('index', 'show');
 
         if (count($metadata->identifier) != 1) {
             throw new \RuntimeException('The CRUD generator does not support entity classes with multiple or no primary keys.');

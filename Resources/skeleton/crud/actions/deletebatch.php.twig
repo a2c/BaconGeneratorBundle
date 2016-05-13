@@ -1,0 +1,36 @@
+{% block method_definition %}
+    public function deleteBatch($ids) 
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        $q = $this->getDoctrine()
+            ->getRepository('{{ bundle }}:{{ entity }}')
+            ->getBatchDeleteQuery($ids);
+
+        $iterableResult = $q->iterate();
+
+        while (($row = $iterableResult->next()) !== false) {
+            $handler = new {{ entity }}FormHandler(
+                $this->createDeleteForm('{{ route_name_prefix }}_delete', $entity),
+                $this->get('doctrine')->getManager(),
+                $this->get('session')->getFlashBag()
+            );
+
+            $handler->delete($row[0]);
+        }
+
+        $this->get('session')->getFlashBag()->clear();
+        $this->get('session')->getFlashBag()->add('message', [
+            'type' => 'success',
+            'message' => 'Os registros foram removidos com sucesso.'
+        ]);
+
+{% endblock method_body %}
+
+{% block method_return %}
+        return true;
+{% endblock method_return %}
+    }
+
+{% block form %}
+{% endblock form %}

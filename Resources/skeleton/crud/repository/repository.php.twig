@@ -61,5 +61,16 @@ class {{ entity_class }}Repository extends EntityRepository
             ->getQuery()
         ;
     }
+
+    public function getBatchDeleteQuery($ids) 
+    {
+        $queryBuilder = $this->createQueryBuilder('e');
+
+        $queryBuilder->add('where', $queryBuilder->expr()->in('e.id', ':ids'))
+             ->setParameter('ids', $ids);
+
+        return $queryBuilder->getQuery();
+    }
+
 {% endblock class_body %}
 }

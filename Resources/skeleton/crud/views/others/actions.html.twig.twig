@@ -21,12 +21,6 @@
                                              <button type="button" class="btn btn-sm btn-danger" title="" data-target="#modalDelete{{ "{{ entity.id }}" }}" data-toggle="modal" data-original-title="{{ "{{ 'Remove'|trans }}" }}">
                                                 <span class="glyphicon glyphicon-remove"></span>
                                             </button>
-                                            {{  "{% embed 'BaconCoreBundle:partial:modalDelete.html.twig' with {
-                                                form: form_delete,
-                                                route: '" ~ route_name_prefix ~ "_" ~ action ~ "',
-                                                id: entity."~ identifier ~"
-                                            } %} " }}
-                                            {{  "{% endembed %}" }}
                             {%- endif  %}
 
                     {%- endfor %}

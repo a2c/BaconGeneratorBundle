@@ -18,13 +18,12 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Sensio\Bundle\GeneratorBundle\Command\AutoComplete\EntitiesAutoCompleter;
 use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
 use Sensio\Bundle\GeneratorBundle\Generator\DoctrineFormGenerator;
-use Sensio\Bundle\GeneratorBundle\Manipulator\RoutingManipulator;
+use Bacon\Bundle\GeneratorBundle\Manipulator\RoutingManipulator;
 use Sensio\Bundle\GeneratorBundle\Command\Validators;
 
 class CrudDoctrineCommand extends GenerateDoctrineCrudCommand
 {
     private $formGenerator;
-
     /**
      * @var \Sensio\Bundle\GeneratorBundle\Generator\DoctrineCrudGenerator
      */
@@ -131,11 +130,16 @@ class CrudDoctrineCommand extends GenerateDoctrineCrudCommand
             'You can also generate it on an subnamespace (Ex: src/FooBundle/Controller/Backend).',
             '',
         ));
+        
 
         $question = new Question($questionHelper->getQuestion('Determine the subnamespace you want:', $controllerFolder), $controllerFolder);
         $controllerFolder = $questionHelper->ask($input, $output, $question);
-        $input->setOption('controller-folder', $controllerFolder);
 
+        if($controllerFolder == 'src/FooBundle/Controller/') {
+            $controllerFolder = '';
+        }
+
+        $input->setOption('controller-folder', $controllerFolder);
 
         // summary
         $output->writeln(array(
@@ -146,6 +150,20 @@ class CrudDoctrineCommand extends GenerateDoctrineCrudCommand
             sprintf('using the "<info>%s</info>" format.', $format),
             '',
         ));
+    }
+
+    protected function updateAnnotationFolderRouting(BundleInterface $bundle, $entity, $prefix, $controllerFolder)
+    {
+        $rootDir = $this->getContainer()->getParameter('kernel.root_dir');
+
+        $routing = new RoutingManipulator($rootDir.'/config/routing.yml');
+        $routing->setControllerFolder($controllerFolder);
+
+        if (!$routing->hasResourceInAnnotation($bundle->getName())) {
+            $parts = explode('\\', $entity);
+            $controller = array_pop($parts);
+            $ret = $routing->addAnnotationController($bundle->getName(), $controller);
+        }
     }
 
     protected function getSkeletonDirs(BundleInterface $bundle = null)
@@ -222,7 +240,7 @@ class CrudDoctrineCommand extends GenerateDoctrineCrudCommand
         if ('annotation' != $format) {
             $runner($this->updateRouting($questionHelper, $input, $output, $bundle, $format, $entity, $prefix));
         } else {
-            $runner($this->updateAnnotationRouting($bundle, $entity, $prefix));
+            $runner($this->updateAnnotationFolderRouting($bundle, $entity, $prefix, $controllerFolder));
         }
 
         $questionHelper->writeGeneratorSummary($output, $errors);

@@ -127,7 +127,7 @@ class CrudDoctrineCommand extends GenerateDoctrineCrudCommand
         $output->writeln(array(
             '',
             'By default, the generator creates the controller on Controller namespace.',
-            'You can also generate it on an subnamespace (Ex: src/FooBundle/Controller/Backend).',
+            'You can also generate it on an subnamespace (Ex: src/AppBundle/Controller/Backend).',
             '',
         ));
         
@@ -135,7 +135,7 @@ class CrudDoctrineCommand extends GenerateDoctrineCrudCommand
         $question = new Question($questionHelper->getQuestion('Determine the subnamespace you want:', $controllerFolder), $controllerFolder);
         $controllerFolder = $questionHelper->ask($input, $output, $question);
 
-        if($controllerFolder == 'src/FooBundle/Controller/') {
+        if($controllerFolder == 'src/AppBundle/Controller/') {
             $controllerFolder = '';
         }
 

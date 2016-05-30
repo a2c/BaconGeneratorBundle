@@ -157,8 +157,10 @@ class DoctrineCrudGenerator extends BaseGenerator
         $entityNamespace = implode('\\', $parts);
 
         $folder = '';
+        $folderNamespace = '';
         if($this->controllerFolder) {
             $folder = '/' . $this->controllerFolder;
+            $folderNamespace = '\\' . $this->controllerFolder;
         }
 
         $target = sprintf(
@@ -174,6 +176,7 @@ class DoctrineCrudGenerator extends BaseGenerator
 
         $this->renderFile('crud/controller.php.twig', $target, array(
             'actions' => $this->actions,
+            'folderNamespace' => $folderNamespace,
             'route_prefix' => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
             'bundle' => $this->bundle->getName(),

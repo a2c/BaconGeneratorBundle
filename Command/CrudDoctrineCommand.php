@@ -123,7 +123,7 @@ class CrudDoctrineCommand extends GenerateDoctrineCrudCommand
         $input->setOption('route-prefix', $prefix);
 
         // controller folder?
-        $controllerFolder = $input->getOption('controller-folder') ?: 'src/FooBundle/Controller/';
+        $controllerFolder = $input->getOption('controller-folder') ?: 'src/AppBundle/Controller/';
         $output->writeln(array(
             '',
             'By default, the generator creates the controller on Controller namespace.',

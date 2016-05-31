@@ -11,7 +11,7 @@
 
         while (($row = $iterableResult->next()) !== false) {
             $handler = new {{ entity }}FormHandler(
-                $this->createDeleteForm('{{ route_name_prefix }}_delete', $entity),
+                $this->createDeleteForm('{{ route_name_prefix }}_delete', $row[0]),
                 $this->get('doctrine')->getManager(),
                 $this->get('session')->getFlashBag()
             );

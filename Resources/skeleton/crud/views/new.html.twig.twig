@@ -19,10 +19,12 @@
                 <section class="row">
                     <div class="col-lg-4">
                         <div class="btn-group">
-                            <a href="{{ "{{ path('" ~ route_name_prefix ~ "') }}" }}" class="btn btn-default">
-                                <span class="glyphicon glyphicon-th-list"></span>
-                                {{ "{{ 'List'|trans }}" }}
-                            </a>
+                            {{ "{% if (bacon_acl_authorization('" ~ route_name_prefix ~ "', 'INDEX') == true) %}" }}
+                                <a href="{{ "{{ path('" ~ route_name_prefix ~ "') }}" }}" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-th-list"></span>
+                                    {{ "{{ 'List'|trans }}" }}
+                                </a>
+                            {{ "{% endif %}" }}
                         </div>
                     </div>
                 </section>
@@ -32,6 +34,8 @@
                 <div class="box-body">
                     {{ '{{ form_widget(form) }}' }}
                 </div>
+
+                {{ "{{ form_bottom_info('Indicates required field'|trans) }}" }}
 
                 <div class="box-footer">
                     <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> {{ "{{ 'Submit'|trans }}" }}</button>

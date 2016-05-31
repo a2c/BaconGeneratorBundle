@@ -2,25 +2,31 @@
 
                             {%- if action == 'show'  %}
 
-                                            <a href="{{ "{{ path('" ~ route_name_prefix ~ "_" ~ action ~ "', { 'id': entity."~ identifier ~" }) }}" }}" class="btn btn-sm btn-default" data-original-title="{{ "{{ 'Show'|trans }}" }}">
-                                                <span class="glyphicon glyphicon-eye-open"></span>
-                                            </a>
+                                            {{ "{% if (bacon_acl_authorization('" ~ route_name_prefix ~ "', 'SHOW') == true) %}" }}
+                                                <a href="{{ "{{ path('" ~ route_name_prefix ~ "_" ~ action ~ "', { 'id': entity."~ identifier ~" }) }}" }}" class="btn btn-sm btn-default" data-original-title="{{ "{{ 'Show'|trans }}" }}">
+                                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                                </a>
+                                            {{ "{% endif %}" }}
 
                             {%- endif  %}
 
                             {%- if action == 'edit' %}
 
-                                            <a href="{{ "{{ path('" ~ route_name_prefix ~ "_" ~ action ~ "', { 'id': entity."~ identifier ~" }) }}" }}" class="btn btn-sm btn-default" data-original-title="{{ "{{ 'Edit'|trans }}" }}">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </a>
+                                            {{ "{% if (bacon_acl_authorization('" ~ route_name_prefix ~ "', 'EDIT') == true) %}" }}
+                                                <a href="{{ "{{ path('" ~ route_name_prefix ~ "_" ~ action ~ "', { 'id': entity."~ identifier ~" }) }}" }}" class="btn btn-sm btn-default" data-original-title="{{ "{{ 'Edit'|trans }}" }}">
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                </a>
+                                            {{ "{% endif %}" }}
 
                             {%- endif  %}
 
                             {%- if action == 'delete' %}
 
-                                             <button type="button" class="btn btn-sm btn-danger" title="" data-target="#modalDelete{{ "{{ entity.id }}" }}" data-toggle="modal" data-original-title="{{ "{{ 'Remove'|trans }}" }}">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </button>
+                                            {{ "{% if (bacon_acl_authorization('" ~ route_name_prefix ~ "', 'DELETE') == true) %}" }}
+                                                <button type="button" class="btn btn-sm btn-danger" title="" data-target="#modalDelete{{ "{{ entity.id }}" }}" data-toggle="modal" data-original-title="{{ "{{ 'Remove'|trans }}" }}">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            {{ "{% endif %}" }}
                             {%- endif  %}
 
                     {%- endfor %}

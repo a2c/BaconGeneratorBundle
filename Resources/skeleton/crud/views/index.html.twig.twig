@@ -30,18 +30,22 @@
                     </div>
                     <div class="col-lg-4 col-lg-offset-4">
                         <div class="btn-group pull-right">
-                            <a href="{{ "{{ path('" ~ route_name_prefix ~ "_new') }}" }}" class="btn btn-success">
-                                <span class="glyphicon glyphicon-plus"></span>
-                                {{ "{{ 'New'|trans }}" }}
-                            </a>
+                            {{ "{% if (bacon_acl_authorization('" ~ route_name_prefix ~ "', 'NEW') == true) %}" }}
+                                <a href="{{ "{{ path('" ~ route_name_prefix ~ "_new') }}" }}" class="btn btn-success">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    {{ "{{ 'New'|trans }}" }}
+                                </a>
+                            {{ "{% endif %}" }}
                             <a href="#modalSearch" class="btn btn-default" data-toggle="modal">
                                 <span class="glyphicon glyphicon-search"></span>
                                 {{ "{{ 'Search'|trans }}" }}
                             </a>
-                            <a href="{{ "{{ path('" ~ route_name_prefix ~ "_export') }}" }}" class="btn btn-default">
-                                <span class="glyphicon glyphicon-download-alt"></span>
-                                {{ "{{ 'Export'|trans }}" }}
-                            </a>
+                            {{ "{% if (bacon_acl_authorization('" ~ route_name_prefix ~ "', 'EXPORT') == true) %}" }}
+                                <a href="{{ "{{ path('" ~ route_name_prefix ~ "_export') }}" }}" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-download-alt"></span>
+                                    {{ "{{ 'Export'|trans }}" }}
+                                </a>
+                            {{ "{% endif %}" }}
                         </div>
                     </div>
                 </section>
@@ -49,7 +53,6 @@
             </div>
             <div class="box-body">
                 <div class="table-responsive">
-
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>

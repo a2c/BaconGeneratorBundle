@@ -1,7 +1,10 @@
-
     /**
 {% block phpdoc_method_header %}
      * Lists all {{ entity }} entities.
+     *
+     * @param int    $page
+     * @param string $sort
+     * @param string $direction
 {% endblock phpdoc_method_header %}
      *
 {% block phpdoc_method_annotations %}
@@ -11,6 +14,8 @@
      * @Method("GET")
      * @Security("has_role('ROLE_ADMIN')")
      * @Template()
+     *
+     * @return Response
 {% endif %}
 {% endblock phpdoc_method_annotations %}
      */
@@ -19,6 +24,12 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
+        $acl = $this->get('bacon_acl.service.authorization');
+
+        if (!$acl->authorize('{{ route_name_prefix }}', 'INDEX')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $breadcumbs = $this->container->get('bacon_breadcrumbs');
 
         $breadcumbs->addItem([
@@ -42,15 +53,13 @@
 
         $paginator = $this->getPagination($query, $page, {{ entity }}::PER_PAGE);
 
-        if($page > 1 && $paginator->count() == 0) {
+        if ($page > 1 && $paginator->count() == 0) {
             return $this->redirect(
-                $this->generateUrl('{{ route_name_prefix }}_pagination', 
-                    array(
-                        'page'=> $page - 1, 
-                        'sort' => $sort, 
-                        'direction' => $direction
-                    )
-                )
+                $this->generateUrl('{{ route_name_prefix }}_pagination', [
+                    'page'=> $page - 1,
+                    'sort' => $sort,
+                    'direction' => $direction
+                ])
             );
         }
 

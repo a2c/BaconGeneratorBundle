@@ -2,6 +2,9 @@
     /**
 {% block phpdoc_method_header %}
      * Displays a form to edit an existing {{ entity }} entity.
+     *
+     * @param Request $request
+     * @param {{ entity }} $entity
 {% endblock phpdoc_method_header %}
      *
 {% block phpdoc_method_annotations %}
@@ -12,12 +15,20 @@
      * @Template()
 {% endif %}
 {% endblock phpdoc_method_annotations %}
+     *
+     * @return Response
      */
 {% block method_definition %}
     public function editAction(Request $request, {{ entity }} $entity)
 {% endblock method_definition %}
     {
 {% block method_body %}
+        $acl = $this->get('bacon_acl.service.authorization');
+
+        if (!$acl->authorize('{{ route_name_prefix }}', 'EDIT')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $breadcumbs = $this->container->get('bacon_breadcrumbs');
 
         $breadcumbs->addItem([
@@ -44,7 +55,7 @@
             if ($entity = $handler->save()) {
                 $route = $this->get('session')->get('last-route');
 
-                if(!$route) {
+                if (!$route) {
                     $route = $this->generateUrl('{{ route_name_prefix }}');
                 }
 

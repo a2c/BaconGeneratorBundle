@@ -1,3 +1,4 @@
+
     /**
 {% block phpdoc_method_header %}
      * Deletes a {{ entity }} entity.
@@ -16,6 +17,12 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
+        $acl = $this->get('bacon_acl.service.authorization');
+
+        if (!$acl->authorize('{{ route_name_prefix }}', 'DELETE')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $handler = new {{ entity }}FormHandler(
             $this->createDeleteForm('{{ route_name_prefix }}_delete', $entity),
             $this->get('doctrine')->getManager(),

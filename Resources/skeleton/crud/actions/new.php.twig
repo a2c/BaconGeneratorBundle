@@ -4,12 +4,16 @@
      * Displays a form to create a new {{ entity }} entity.
 {% endblock phpdoc_method_header %}
      *
+     * @param Request $request
+     *
 {% block phpdoc_method_annotations %}
 {% if 'annotation' == format %}
      * @Route("/new", name="{{ route_name_prefix }}_new")
      * @Method({"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      * @Template()
+     *
+     * @return Response
 {% endif %}
 {% endblock phpdoc_method_annotations %}
      */
@@ -18,6 +22,12 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
+        $acl = $this->get('bacon_acl.service.authorization');
+
+        if (!$acl->authorize('{{ route_name_prefix }}', 'NEW')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $breadcumbs = $this->container->get('bacon_breadcrumbs');
 
         $breadcumbs->addItem([

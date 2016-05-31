@@ -1,22 +1,30 @@
+
 {% block method_definition %}
     public function deleteBatch($ids) 
 {% endblock method_definition %}
     {
 {% block method_body %}
+        $acl = $this->get('bacon_acl.service.authorization');
+
+        if (!$acl->authorize('{{ route_name_prefix }}', 'DELETE')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $q = $this->getDoctrine()
             ->getRepository('{{ bundle }}:{{ entity }}')
-            ->getBatchDeleteQuery($ids);
+            ->getBatchDeleteQuery($ids)
+        ;
 
         $iterableResult = $q->iterate();
 
         while (($row = $iterableResult->next()) !== false) {
             $handler = new {{ entity }}FormHandler(
-                $this->createDeleteForm('{{ route_name_prefix }}_delete', $row[0]),
+                $this->createDeleteForm('{{ route_name_prefix }}_delete', current($row)),
                 $this->get('doctrine')->getManager(),
                 $this->get('session')->getFlashBag()
             );
 
-            $handler->delete($row[0]);
+            $handler->delete(current($row));
         }
 
         $this->get('session')->getFlashBag()->clear();
@@ -24,13 +32,9 @@
             'type' => 'success',
             'message' => 'Os registros foram removidos com sucesso.'
         ]);
-
 {% endblock method_body %}
 
 {% block method_return %}
         return true;
 {% endblock method_return %}
     }
-
-{% block form %}
-{% endblock form %}

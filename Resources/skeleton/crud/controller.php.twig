@@ -5,10 +5,10 @@ namespace {{ namespace }}\Controller{{ folderNamespace }}{{ entity_namespace ? '
 {% block use_statements %}
 {% if 'new' in actions or 'edit' in actions or 'delete' in actions %}
 use Symfony\Component\HttpFoundation\Request;
-{%- endif %}
-
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+{% endif %}
 {% if 'annotation' == format -%}
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;

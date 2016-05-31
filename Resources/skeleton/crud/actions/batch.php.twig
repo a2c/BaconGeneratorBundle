@@ -16,10 +16,15 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
+        $acl = $this->get('bacon_acl.service.authorization');
+
+        if (!$acl->authorize('{{ route_name_prefix }}', 'INDEX')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $data = $request->request->all();
 
         if(!array_key_exists('ids', $data) || count($data['ids']) == 0) {
-
             return $this->redirect($request->headers->get('referer'));
         }
         
@@ -37,6 +42,3 @@
         return $this->redirect($request->headers->get('referer'));
 {% endblock method_return %}
     }
-    
-{% block form %}
-{% endblock form %}

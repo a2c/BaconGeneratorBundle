@@ -18,7 +18,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Sensio\Bundle\GeneratorBundle\Command\AutoComplete\EntitiesAutoCompleter;
 use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
 use Sensio\Bundle\GeneratorBundle\Generator\DoctrineFormGenerator;
-use Bacon\Bundle\GeneratorBundle\Manipulator\RoutingManipulator;
+use Bacon\Bundle\GeneratorBundle\Manipulator\BaconRoutingManipulator as RoutingManipulator;
 use Sensio\Bundle\GeneratorBundle\Command\Validators;
 
 class CrudDoctrineCommand extends GenerateDoctrineCrudCommand

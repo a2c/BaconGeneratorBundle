@@ -21,7 +21,7 @@ use Sensio\Bundle\GeneratorBundle\Manipulator\RoutingManipulator;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class RoutingManipulator extends RoutingManipulator
+class BaconRoutingManipulator extends RoutingManipulator
 {
     private $file;
     private $controllerFolder;

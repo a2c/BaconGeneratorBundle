@@ -246,7 +246,7 @@ class CrudDoctrineCommand extends GenerateDoctrineCrudCommand
         $questionHelper->writeGeneratorSummary($output, $errors);
     }
 
-    protected function createGenerator(BundleInterface $bundle = null)
+    protected function createGenerator($bundle = null)
     {
         return new BaconDoctrineCrudGenerator(
             $this->getContainer()->get('filesystem'),
